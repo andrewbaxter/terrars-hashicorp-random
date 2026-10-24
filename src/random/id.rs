@@ -1,47 +1,51 @@
 use serde::Serialize;
-use std::cell::RefCell;
-use std::rc::Rc;
-use terrars::*;
+use terrars::{
+    Referable as _,
+    Resource_ as _,
+    Ref as _,
+};
 use super::provider::ProviderRandom;
 
 #[derive(Serialize)]
 struct IdData {
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    depends_on: Vec<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    provider: Option<String>,
-    #[serde(skip_serializing_if = "SerdeSkipDefault::is_default")]
-    lifecycle: ResourceLifecycle,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    for_each: Option<String>,
-    byte_length: PrimField<f64>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    keepers: Option<RecField<PrimField<String>>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    prefix: Option<PrimField<String>>,
+    #[serde(skip_serializing_if = "std::vec::Vec::is_empty")]
+    depends_on: std::vec::Vec<std::string::String>,
+    #[serde(skip_serializing_if = "std::option::Option::is_none")]
+    provider: std::option::Option<std::string::String>,
+    #[serde(skip_serializing_if = "terrars::SerdeSkipDefault::is_default")]
+    lifecycle: terrars::ResourceLifecycle,
+    #[serde(skip_serializing_if = "std::option::Option::is_none")]
+    for_each: std::option::Option<std::string::String>,
+    #[serde(skip_serializing_if = "std::vec::Vec::is_empty")]
+    provisioner: std::vec::Vec<terrars::Provisioner>,
+    byte_length: terrars::PrimField<f64>,
+    #[serde(skip_serializing_if = "std::option::Option::is_none")]
+    keepers: std::option::Option<terrars::RecField<terrars::PrimField<std::string::String>>>,
+    #[serde(skip_serializing_if = "std::option::Option::is_none")]
+    prefix: std::option::Option<terrars::PrimField<std::string::String>>,
 }
 
 struct Id_ {
-    shared: StackShared,
-    tf_id: String,
-    data: RefCell<IdData>,
+    shared: terrars::StackShared,
+    tf_id: std::string::String,
+    data: std::cell::RefCell<IdData>,
 }
 
 #[derive(Clone)]
-pub struct Id(Rc<Id_>);
+pub struct Id(std::rc::Rc<Id_>);
 
 impl Id {
-    fn shared(&self) -> &StackShared {
+    fn shared(&self) -> &terrars::StackShared {
         &self.0.shared
     }
 
-    pub fn depends_on(self, dep: &impl Referable) -> Self {
+    pub fn depends_on(self, dep: &impl terrars::Referable) -> Self {
         self.0.data.borrow_mut().depends_on.push(dep.extract_ref());
         self
     }
 
     pub fn set_provider(self, provider: &ProviderRandom) -> Self {
-        self.0.data.borrow_mut().provider = Some(provider.provider_ref());
+        self.0.data.borrow_mut().provider = std::option::Option::Some(provider.provider_ref());
         self
     }
 
@@ -56,117 +60,163 @@ impl Id {
     }
 
     pub fn ignore_changes_to_all(self) -> Self {
-        self.0.data.borrow_mut().lifecycle.ignore_changes = Some(IgnoreChanges::All(IgnoreChangesAll::All));
+        self.0.data.borrow_mut().lifecycle.ignore_changes =
+            std::option::Option::Some(terrars::IgnoreChanges::All(terrars::IgnoreChangesAll::All));
         self
     }
 
-    pub fn ignore_changes_to_attr(self, attr: impl ToString) -> Self {
+    pub fn ignore_changes_to_attr(self, attr: impl std::string::ToString) -> Self {
         {
             let mut d = self.0.data.borrow_mut();
             if match &mut d.lifecycle.ignore_changes {
-                Some(i) => match i {
-                    IgnoreChanges::All(_) => {
+                std::option::Option::Some(i) => match i {
+                    terrars::IgnoreChanges::All(_) => {
                         true
                     },
-                    IgnoreChanges::Refs(r) => {
+                    terrars::IgnoreChanges::Refs(r) => {
                         r.push(attr.to_string());
                         false
                     },
                 },
-                None => true,
+                std::option::Option::None => true,
             } {
-                d.lifecycle.ignore_changes = Some(IgnoreChanges::Refs(vec![attr.to_string()]));
+                d.lifecycle.ignore_changes =
+                    std::option::Option::Some(terrars::IgnoreChanges::Refs(vec![attr.to_string()]));
             }
         }
         self
     }
 
-    pub fn replace_triggered_by_resource(self, r: &impl Resource) -> Self {
+    pub fn replace_triggered_by_resource(self, r: &impl terrars::Resource) -> Self {
         self.0.data.borrow_mut().lifecycle.replace_triggered_by.push(r.extract_ref());
         self
     }
 
-    pub fn replace_triggered_by_attr(self, attr: impl ToString) -> Self {
+    pub fn replace_triggered_by_attr(self, attr: impl std::string::ToString) -> Self {
         self.0.data.borrow_mut().lifecycle.replace_triggered_by.push(attr.to_string());
         self
     }
 
-    #[doc= "Set the field `keepers`.\nArbitrary map of values that, when changed, will trigger recreation of resource. See [the main provider documentation](../index.html) for more information."]
-    pub fn set_keepers(self, v: impl Into<RecField<PrimField<String>>>) -> Self {
-        self.0.data.borrow_mut().keepers = Some(v.into());
+    #[doc = r" Add a provisioner (ex: `local-exec`, `remote-exec`, `file`) to this resource."]
+    #[doc = r" Provisioners run in the order they're added."]
+    pub fn add_provisioner(self, v: impl std::convert::Into<terrars::Provisioner>) -> Self {
+        self.0.data.borrow_mut().provisioner.push(v.into());
         self
     }
 
-    #[doc= "Set the field `prefix`.\nArbitrary string to prefix the output value with. This string is supplied as-is, meaning it is not guaranteed to be URL-safe or base64 encoded."]
-    pub fn set_prefix(self, v: impl Into<PrimField<String>>) -> Self {
-        self.0.data.borrow_mut().prefix = Some(v.into());
+    pub fn add_lifecycle_precondition(
+        self,
+        condition: impl std::convert::Into<terrars::PrimField<bool>>,
+        error_message: impl std::convert::Into<terrars::PrimField<std::string::String>>,
+    ) -> Self {
+        self.0.data.borrow_mut().lifecycle.precondition.push(terrars::LifecycleCondition {
+            condition: condition.into(),
+            error_message: error_message.into(),
+        });
         self
     }
 
-    #[doc= "Get a reference to the value of field `b64_std` after provisioning.\nThe generated id presented in base64 without additional transformations."]
-    pub fn b64_std(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.b64_std", self.extract_ref()))
+    pub fn add_lifecycle_postcondition(
+        self,
+        condition: impl std::convert::Into<terrars::PrimField<bool>>,
+        error_message: impl std::convert::Into<terrars::PrimField<std::string::String>>,
+    ) -> Self {
+        self.0.data.borrow_mut().lifecycle.postcondition.push(terrars::LifecycleCondition {
+            condition: condition.into(),
+            error_message: error_message.into(),
+        });
+        self
     }
 
-    #[doc= "Get a reference to the value of field `b64_url` after provisioning.\nThe generated id presented in base64, using the URL-friendly character set: case-sensitive letters, digits and the characters `_` and `-`."]
-    pub fn b64_url(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.b64_url", self.extract_ref()))
+    #[doc =
+        "Set the field `keepers`.\nArbitrary map of values that, when changed, will trigger recreation of resource. See [the main provider documentation](../index.html) for more information."]
+    pub fn set_keepers(
+        self,
+        v: impl std::convert::Into<terrars::RecField<terrars::PrimField<std::string::String>>>,
+    ) -> Self {
+        self.0.data.borrow_mut().keepers = std::option::Option::Some(v.into());
+        self
     }
 
-    #[doc= "Get a reference to the value of field `byte_length` after provisioning.\nThe number of random bytes to produce. The minimum value is 1, which produces eight bits of randomness."]
-    pub fn byte_length(&self) -> PrimExpr<f64> {
-        PrimExpr::new(self.shared().clone(), format!("{}.byte_length", self.extract_ref()))
+    #[doc =
+        "Set the field `prefix`.\nArbitrary string to prefix the output value with. This string is supplied as-is, meaning it is not guaranteed to be URL-safe or base64 encoded."]
+    pub fn set_prefix(self, v: impl std::convert::Into<terrars::PrimField<std::string::String>>) -> Self {
+        self.0.data.borrow_mut().prefix = std::option::Option::Some(v.into());
+        self
     }
 
-    #[doc= "Get a reference to the value of field `dec` after provisioning.\nThe generated id presented in non-padded decimal digits."]
-    pub fn dec(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.dec", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `b64_std` after provisioning.\nThe generated id presented in base64 without additional transformations."]
+    pub fn b64_std(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.b64_std", self.extract_ref()))
     }
 
-    #[doc= "Get a reference to the value of field `hex` after provisioning.\nThe generated id presented in padded hexadecimal digits. This result will always be twice as long as the requested byte length."]
-    pub fn hex(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.hex", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `b64_url` after provisioning.\nThe generated id presented in base64, using the URL-friendly character set: case-sensitive letters, digits and the characters `_` and `-`."]
+    pub fn b64_url(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.b64_url", self.extract_ref()))
     }
 
-    #[doc= "Get a reference to the value of field `id` after provisioning.\nThe generated id presented in base64 without additional transformations or prefix."]
-    pub fn id(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.id", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `byte_length` after provisioning.\nThe number of random bytes to produce. The minimum value is 1, which produces eight bits of randomness."]
+    pub fn byte_length(&self) -> terrars::PrimExpr<f64> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.byte_length", self.extract_ref()))
     }
 
-    #[doc= "Get a reference to the value of field `keepers` after provisioning.\nArbitrary map of values that, when changed, will trigger recreation of resource. See [the main provider documentation](../index.html) for more information."]
-    pub fn keepers(&self) -> RecRef<PrimExpr<String>> {
-        RecRef::new(self.shared().clone(), format!("{}.keepers", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `dec` after provisioning.\nThe generated id presented in non-padded decimal digits."]
+    pub fn dec(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.dec", self.extract_ref()))
     }
 
-    #[doc= "Get a reference to the value of field `prefix` after provisioning.\nArbitrary string to prefix the output value with. This string is supplied as-is, meaning it is not guaranteed to be URL-safe or base64 encoded."]
-    pub fn prefix(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.prefix", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `hex` after provisioning.\nThe generated id presented in padded hexadecimal digits. This result will always be twice as long as the requested byte length."]
+    pub fn hex(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.hex", self.extract_ref()))
+    }
+
+    #[doc =
+        "Get a reference to the value of field `id` after provisioning.\nThe generated id presented in base64 without additional transformations or prefix."]
+    pub fn id(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.id", self.extract_ref()))
+    }
+
+    #[doc =
+        "Get a reference to the value of field `keepers` after provisioning.\nArbitrary map of values that, when changed, will trigger recreation of resource. See [the main provider documentation](../index.html) for more information."]
+    pub fn keepers(&self) -> terrars::RecRef<terrars::PrimExpr<std::string::String>> {
+        terrars::RecRef::new(self.shared().clone(), format!("{}.keepers", self.extract_ref()))
+    }
+
+    #[doc =
+        "Get a reference to the value of field `prefix` after provisioning.\nArbitrary string to prefix the output value with. This string is supplied as-is, meaning it is not guaranteed to be URL-safe or base64 encoded."]
+    pub fn prefix(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.prefix", self.extract_ref()))
     }
 }
 
-impl Referable for Id {
-    fn extract_ref(&self) -> String {
+impl terrars::Referable for Id {
+    fn extract_ref(&self) -> std::string::String {
         format!("{}.{}", self.0.extract_resource_type(), self.0.extract_tf_id())
     }
 }
 
-impl Resource for Id { }
+impl terrars::Resource for Id { }
 
-impl ToListMappable for Id {
-    type O = ListRef<IdRef>;
+impl terrars::ToListMappable for Id {
+    type O = terrars::ListRef<IdRef>;
 
-    fn do_map(self, base: String) -> Self::O {
-        self.0.data.borrow_mut().for_each = Some(format!("${{{}}}", base));
-        ListRef::new(self.0.shared.clone(), self.extract_ref())
+    fn do_map(self, base: std::string::String) -> Self::O {
+        self.0.data.borrow_mut().for_each = std::option::Option::Some(format!("${{{}}}", base));
+        terrars::ListRef::new(self.0.shared.clone(), self.extract_ref())
     }
 }
 
-impl Resource_ for Id_ {
-    fn extract_resource_type(&self) -> String {
+impl terrars::Resource_ for Id_ {
+    fn extract_resource_type(&self) -> std::string::String {
         "random_id".into()
     }
 
-    fn extract_tf_id(&self) -> String {
+    fn extract_tf_id(&self) -> std::string::String {
         self.tf_id.clone()
     }
 
@@ -176,21 +226,22 @@ impl Resource_ for Id_ {
 }
 
 pub struct BuildId {
-    pub tf_id: String,
-    #[doc= "The number of random bytes to produce. The minimum value is 1, which produces eight bits of randomness."]
-    pub byte_length: PrimField<f64>,
+    pub tf_id: std::string::String,
+    #[doc = "The number of random bytes to produce. The minimum value is 1, which produces eight bits of randomness."]
+    pub byte_length: terrars::PrimField<f64>,
 }
 
 impl BuildId {
-    pub fn build(self, stack: &mut Stack) -> Id {
-        let out = Id(Rc::new(Id_ {
+    pub fn build(self, stack: &mut terrars::Stack) -> Id {
+        let out = Id(std::rc::Rc::new(Id_ {
             shared: stack.shared.clone(),
             tf_id: self.tf_id,
-            data: RefCell::new(IdData {
+            data: std::cell::RefCell::new(IdData {
                 depends_on: core::default::Default::default(),
-                provider: None,
+                provider: std::option::Option::None,
                 lifecycle: core::default::Default::default(),
-                for_each: None,
+                for_each: std::option::Option::None,
+                provisioner: core::default::Default::default(),
                 byte_length: self.byte_length,
                 keepers: core::default::Default::default(),
                 prefix: core::default::Default::default(),
@@ -202,12 +253,12 @@ impl BuildId {
 }
 
 pub struct IdRef {
-    shared: StackShared,
-    base: String,
+    shared: terrars::StackShared,
+    base: std::string::String,
 }
 
-impl Ref for IdRef {
-    fn new(shared: StackShared, base: String) -> Self {
+impl terrars::Ref for IdRef {
+    fn new(shared: terrars::StackShared, base: std::string::String) -> Self {
         Self {
             shared: shared,
             base: base,
@@ -216,51 +267,59 @@ impl Ref for IdRef {
 }
 
 impl IdRef {
-    fn extract_ref(&self) -> String {
+    fn extract_ref(&self) -> std::string::String {
         self.base.clone()
     }
 
-    fn shared(&self) -> &StackShared {
+    fn shared(&self) -> &terrars::StackShared {
         &self.shared
     }
 
-    #[doc= "Get a reference to the value of field `b64_std` after provisioning.\nThe generated id presented in base64 without additional transformations."]
-    pub fn b64_std(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.b64_std", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `b64_std` after provisioning.\nThe generated id presented in base64 without additional transformations."]
+    pub fn b64_std(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.b64_std", self.extract_ref()))
     }
 
-    #[doc= "Get a reference to the value of field `b64_url` after provisioning.\nThe generated id presented in base64, using the URL-friendly character set: case-sensitive letters, digits and the characters `_` and `-`."]
-    pub fn b64_url(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.b64_url", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `b64_url` after provisioning.\nThe generated id presented in base64, using the URL-friendly character set: case-sensitive letters, digits and the characters `_` and `-`."]
+    pub fn b64_url(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.b64_url", self.extract_ref()))
     }
 
-    #[doc= "Get a reference to the value of field `byte_length` after provisioning.\nThe number of random bytes to produce. The minimum value is 1, which produces eight bits of randomness."]
-    pub fn byte_length(&self) -> PrimExpr<f64> {
-        PrimExpr::new(self.shared().clone(), format!("{}.byte_length", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `byte_length` after provisioning.\nThe number of random bytes to produce. The minimum value is 1, which produces eight bits of randomness."]
+    pub fn byte_length(&self) -> terrars::PrimExpr<f64> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.byte_length", self.extract_ref()))
     }
 
-    #[doc= "Get a reference to the value of field `dec` after provisioning.\nThe generated id presented in non-padded decimal digits."]
-    pub fn dec(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.dec", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `dec` after provisioning.\nThe generated id presented in non-padded decimal digits."]
+    pub fn dec(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.dec", self.extract_ref()))
     }
 
-    #[doc= "Get a reference to the value of field `hex` after provisioning.\nThe generated id presented in padded hexadecimal digits. This result will always be twice as long as the requested byte length."]
-    pub fn hex(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.hex", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `hex` after provisioning.\nThe generated id presented in padded hexadecimal digits. This result will always be twice as long as the requested byte length."]
+    pub fn hex(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.hex", self.extract_ref()))
     }
 
-    #[doc= "Get a reference to the value of field `id` after provisioning.\nThe generated id presented in base64 without additional transformations or prefix."]
-    pub fn id(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.id", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `id` after provisioning.\nThe generated id presented in base64 without additional transformations or prefix."]
+    pub fn id(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.id", self.extract_ref()))
     }
 
-    #[doc= "Get a reference to the value of field `keepers` after provisioning.\nArbitrary map of values that, when changed, will trigger recreation of resource. See [the main provider documentation](../index.html) for more information."]
-    pub fn keepers(&self) -> RecRef<PrimExpr<String>> {
-        RecRef::new(self.shared().clone(), format!("{}.keepers", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `keepers` after provisioning.\nArbitrary map of values that, when changed, will trigger recreation of resource. See [the main provider documentation](../index.html) for more information."]
+    pub fn keepers(&self) -> terrars::RecRef<terrars::PrimExpr<std::string::String>> {
+        terrars::RecRef::new(self.shared().clone(), format!("{}.keepers", self.extract_ref()))
     }
 
-    #[doc= "Get a reference to the value of field `prefix` after provisioning.\nArbitrary string to prefix the output value with. This string is supplied as-is, meaning it is not guaranteed to be URL-safe or base64 encoded."]
-    pub fn prefix(&self) -> PrimExpr<String> {
-        PrimExpr::new(self.shared().clone(), format!("{}.prefix", self.extract_ref()))
+    #[doc =
+        "Get a reference to the value of field `prefix` after provisioning.\nArbitrary string to prefix the output value with. This string is supplied as-is, meaning it is not guaranteed to be URL-safe or base64 encoded."]
+    pub fn prefix(&self) -> terrars::PrimExpr<std::string::String> {
+        terrars::PrimExpr::new(self.shared().clone(), format!("{}.prefix", self.extract_ref()))
     }
 }

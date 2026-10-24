@@ -1,38 +1,35 @@
 use serde::Serialize;
-use std::cell::RefCell;
-use std::rc::Rc;
-use terrars::*;
 
 #[derive(Serialize)]
 struct ProviderRandomData {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    alias: Option<String>,
+    #[serde(skip_serializing_if = "std::option::Option::is_none")]
+    alias: std::option::Option<std::string::String>,
 }
 
 struct ProviderRandom_ {
-    data: RefCell<ProviderRandomData>,
+    data: std::cell::RefCell<ProviderRandomData>,
 }
 
-pub struct ProviderRandom(Rc<ProviderRandom_>);
+pub struct ProviderRandom(std::rc::Rc<ProviderRandom_>);
 
 impl ProviderRandom {
-    pub fn provider_ref(&self) -> String {
+    pub fn provider_ref(&self) -> std::string::String {
         let data = self.0.data.borrow();
-        if let Some(alias) = &data.alias {
+        if let std::option::Option::Some(alias) = &data.alias {
             format!("{}.{}", "random", alias)
         } else {
             "random".into()
         }
     }
 
-    pub fn set_alias(self, alias: impl ToString) -> Self {
-        self.0.data.borrow_mut().alias = Some(alias.to_string());
+    pub fn set_alias(self, alias: impl std::string::ToString) -> Self {
+        self.0.data.borrow_mut().alias = std::option::Option::Some(alias.to_string());
         self
     }
 }
 
-impl Provider for ProviderRandom_ {
-    fn extract_type_tf_id(&self) -> String {
+impl terrars::Provider for ProviderRandom_ {
+    fn extract_type_tf_id(&self) -> std::string::String {
         "random".into()
     }
 
@@ -51,9 +48,15 @@ impl Provider for ProviderRandom_ {
 pub struct BuildProviderRandom {}
 
 impl BuildProviderRandom {
-    pub fn build(self, stack: &mut Stack) -> ProviderRandom {
+    pub fn build(self, stack: &mut terrars::Stack) -> ProviderRandom {
         let out =
-            ProviderRandom(Rc::new(ProviderRandom_ { data: RefCell::new(ProviderRandomData { alias: None }) }));
+            ProviderRandom(
+                std::rc::Rc::new(
+                    ProviderRandom_ {
+                        data: std::cell::RefCell::new(ProviderRandomData { alias: std::option::Option::None }),
+                    },
+                ),
+            );
         stack.add_provider(out.0.clone());
         out
     }
