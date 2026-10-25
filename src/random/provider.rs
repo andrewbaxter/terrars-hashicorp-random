@@ -1,13 +1,15 @@
+#![allow(non_camel_case_types)]
+
 use serde::Serialize;
 
 #[derive(Serialize)]
-struct ProviderRandomData {
+struct ProviderRandomData_ {
     #[serde(skip_serializing_if = "std::option::Option::is_none")]
     alias: std::option::Option<std::string::String>,
 }
 
 struct ProviderRandom_ {
-    data: std::cell::RefCell<ProviderRandomData>,
+    data: std::cell::RefCell<ProviderRandomData_>,
 }
 
 pub struct ProviderRandom(std::rc::Rc<ProviderRandom_>);
@@ -36,7 +38,7 @@ impl terrars::Provider for ProviderRandom_ {
     fn extract_provider_type(&self) -> serde_json::Value {
         serde_json::json!({
             "source": "hashicorp/random",
-            "version": "3.4.3",
+            "version": "3.9.1",
         })
     }
 
@@ -53,7 +55,7 @@ impl BuildProviderRandom {
             ProviderRandom(
                 std::rc::Rc::new(
                     ProviderRandom_ {
-                        data: std::cell::RefCell::new(ProviderRandomData { alias: std::option::Option::None }),
+                        data: std::cell::RefCell::new(ProviderRandomData_ { alias: std::option::Option::None }),
                     },
                 ),
             );

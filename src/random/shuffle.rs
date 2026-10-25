@@ -1,3 +1,5 @@
+#![allow(non_camel_case_types)]
+
 use serde::Serialize;
 use terrars::{
     Referable as _,
@@ -7,7 +9,7 @@ use terrars::{
 use super::provider::ProviderRandom;
 
 #[derive(Serialize)]
-struct ShuffleData {
+struct ShuffleData_ {
     #[serde(skip_serializing_if = "std::vec::Vec::is_empty")]
     depends_on: std::vec::Vec<std::string::String>,
     #[serde(skip_serializing_if = "std::option::Option::is_none")]
@@ -30,7 +32,7 @@ struct ShuffleData {
 struct Shuffle_ {
     shared: terrars::StackShared,
     tf_id: std::string::String,
-    data: std::cell::RefCell<ShuffleData>,
+    data: std::cell::RefCell<ShuffleData_>,
 }
 
 #[derive(Clone)]
@@ -172,7 +174,7 @@ impl Shuffle {
     }
 
     #[doc =
-        "Get a reference to the value of field `result` after provisioning.\nRandom permutation of the list of strings given in `input`."]
+        "Get a reference to the value of field `result` after provisioning.\nRandom permutation of the list of strings given in `input`. The number of elements is determined by `result_count` if set, or the number of elements in `input`."]
     pub fn result(&self) -> terrars::ListRef<terrars::PrimExpr<std::string::String>> {
         terrars::ListRef::new(self.shared().clone(), format!("{}.result", self.extract_ref()))
     }
@@ -232,7 +234,7 @@ impl BuildShuffle {
         let out = Shuffle(std::rc::Rc::new(Shuffle_ {
             shared: stack.shared.clone(),
             tf_id: self.tf_id,
-            data: std::cell::RefCell::new(ShuffleData {
+            data: std::cell::RefCell::new(ShuffleData_ {
                 depends_on: core::default::Default::default(),
                 provider: std::option::Option::None,
                 lifecycle: core::default::Default::default(),
@@ -290,7 +292,7 @@ impl ShuffleRef {
     }
 
     #[doc =
-        "Get a reference to the value of field `result` after provisioning.\nRandom permutation of the list of strings given in `input`."]
+        "Get a reference to the value of field `result` after provisioning.\nRandom permutation of the list of strings given in `input`. The number of elements is determined by `result_count` if set, or the number of elements in `input`."]
     pub fn result(&self) -> terrars::ListRef<terrars::PrimExpr<std::string::String>> {
         terrars::ListRef::new(self.shared().clone(), format!("{}.result", self.extract_ref()))
     }

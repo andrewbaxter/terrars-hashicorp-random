@@ -1,6 +1,6 @@
 {
     "provider": "hashicorp/random",
-    "version": "3.4.3",
+    "version": "3.9.1",
     "dest": "src/random",
 	"feature_gate": "Cargo.toml"
 }

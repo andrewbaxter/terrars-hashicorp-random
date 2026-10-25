@@ -1,3 +1,5 @@
+#![allow(non_camel_case_types)]
+
 use serde::Serialize;
 use terrars::{
     Referable as _,
@@ -7,7 +9,7 @@ use terrars::{
 use super::provider::ProviderRandom;
 
 #[derive(Serialize)]
-struct PasswordData {
+struct PasswordData_ {
     #[serde(skip_serializing_if = "std::vec::Vec::is_empty")]
     depends_on: std::vec::Vec<std::string::String>,
     #[serde(skip_serializing_if = "std::option::Option::is_none")]
@@ -46,7 +48,7 @@ struct PasswordData {
 struct Password_ {
     shared: terrars::StackShared,
     tf_id: std::string::String,
-    data: std::cell::RefCell<PasswordData>,
+    data: std::cell::RefCell<PasswordData_>,
 }
 
 #[derive(Clone)]
@@ -189,20 +191,21 @@ impl Password {
     }
 
     #[doc =
-        "Set the field `number`.\nInclude numeric characters in the result. Default value is `true`. **NOTE**: This is deprecated, use `numeric` instead."]
+        "Set the field `number`.\nInclude numeric characters in the result. Default value is `true`. If `number`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`. **NOTE**: This is deprecated, use `numeric` instead."]
     pub fn set_number(self, v: impl std::convert::Into<terrars::PrimField<bool>>) -> Self {
         self.0.data.borrow_mut().number = std::option::Option::Some(v.into());
         self
     }
 
-    #[doc = "Set the field `numeric`.\nInclude numeric characters in the result. Default value is `true`."]
+    #[doc =
+        "Set the field `numeric`.\nInclude numeric characters in the result. Default value is `true`. If `numeric`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`."]
     pub fn set_numeric(self, v: impl std::convert::Into<terrars::PrimField<bool>>) -> Self {
         self.0.data.borrow_mut().numeric = std::option::Option::Some(v.into());
         self
     }
 
     #[doc =
-        "Set the field `override_special`.\nSupply your own list of special characters to use for string generation.  This overrides the default character list in the special argument.  The `special` argument must still be set to true for any overwritten characters to be used in generation."]
+        "Set the field `override_special`.\nSupply your own list of special characters to use for password generation.  This overrides the default character list in the special argument.  The `special` argument must still be set to true for any overwritten characters to be used in generation."]
     pub fn set_override_special(self, v: impl std::convert::Into<terrars::PrimField<std::string::String>>) -> Self {
         self.0.data.borrow_mut().override_special = std::option::Option::Some(v.into());
         self
@@ -222,7 +225,7 @@ impl Password {
     }
 
     #[doc =
-        "Get a reference to the value of field `bcrypt_hash` after provisioning.\nA bcrypt hash of the generated random string."]
+        "Get a reference to the value of field `bcrypt_hash` after provisioning.\nA bcrypt hash of the generated random password. **NOTE**: If the generated random password is greater than 72 bytes in length, `bcrypt_hash` will contain a hash of the first 72 bytes."]
     pub fn bcrypt_hash(&self) -> terrars::PrimExpr<std::string::String> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.bcrypt_hash", self.extract_ref()))
     }
@@ -240,7 +243,7 @@ impl Password {
     }
 
     #[doc =
-        "Get a reference to the value of field `length` after provisioning.\nThe length of the string desired. The minimum value for length is 1 and, length must also be >= (`min_upper` + `min_lower` + `min_numeric` + `min_special`)."]
+        "Get a reference to the value of field `length` after provisioning.\nThe length of the password desired. The minimum value for length is 1 and, length must also be >= (`min_upper` + `min_lower` + `min_numeric` + `min_special`)."]
     pub fn length(&self) -> terrars::PrimExpr<f64> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.length", self.extract_ref()))
     }
@@ -276,24 +279,24 @@ impl Password {
     }
 
     #[doc =
-        "Get a reference to the value of field `number` after provisioning.\nInclude numeric characters in the result. Default value is `true`. **NOTE**: This is deprecated, use `numeric` instead."]
+        "Get a reference to the value of field `number` after provisioning.\nInclude numeric characters in the result. Default value is `true`. If `number`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`. **NOTE**: This is deprecated, use `numeric` instead."]
     pub fn number(&self) -> terrars::PrimExpr<bool> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.number", self.extract_ref()))
     }
 
     #[doc =
-        "Get a reference to the value of field `numeric` after provisioning.\nInclude numeric characters in the result. Default value is `true`."]
+        "Get a reference to the value of field `numeric` after provisioning.\nInclude numeric characters in the result. Default value is `true`. If `numeric`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`."]
     pub fn numeric(&self) -> terrars::PrimExpr<bool> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.numeric", self.extract_ref()))
     }
 
     #[doc =
-        "Get a reference to the value of field `override_special` after provisioning.\nSupply your own list of special characters to use for string generation.  This overrides the default character list in the special argument.  The `special` argument must still be set to true for any overwritten characters to be used in generation."]
+        "Get a reference to the value of field `override_special` after provisioning.\nSupply your own list of special characters to use for password generation.  This overrides the default character list in the special argument.  The `special` argument must still be set to true for any overwritten characters to be used in generation."]
     pub fn override_special(&self) -> terrars::PrimExpr<std::string::String> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.override_special", self.extract_ref()))
     }
 
-    #[doc = "Get a reference to the value of field `result` after provisioning.\nThe generated random string."]
+    #[doc = "Get a reference to the value of field `result` after provisioning.\nThe generated random password."]
     pub fn result(&self) -> terrars::PrimExpr<std::string::String> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.result", self.extract_ref()))
     }
@@ -345,7 +348,7 @@ impl terrars::Resource_ for Password_ {
 pub struct BuildPassword {
     pub tf_id: std::string::String,
     #[doc =
-        "The length of the string desired. The minimum value for length is 1 and, length must also be >= (`min_upper` + `min_lower` + `min_numeric` + `min_special`)."]
+        "The length of the password desired. The minimum value for length is 1 and, length must also be >= (`min_upper` + `min_lower` + `min_numeric` + `min_special`)."]
     pub length: terrars::PrimField<f64>,
 }
 
@@ -354,7 +357,7 @@ impl BuildPassword {
         let out = Password(std::rc::Rc::new(Password_ {
             shared: stack.shared.clone(),
             tf_id: self.tf_id,
-            data: std::cell::RefCell::new(PasswordData {
+            data: std::cell::RefCell::new(PasswordData_ {
                 depends_on: core::default::Default::default(),
                 provider: std::option::Option::None,
                 lifecycle: core::default::Default::default(),
@@ -403,7 +406,7 @@ impl PasswordRef {
     }
 
     #[doc =
-        "Get a reference to the value of field `bcrypt_hash` after provisioning.\nA bcrypt hash of the generated random string."]
+        "Get a reference to the value of field `bcrypt_hash` after provisioning.\nA bcrypt hash of the generated random password. **NOTE**: If the generated random password is greater than 72 bytes in length, `bcrypt_hash` will contain a hash of the first 72 bytes."]
     pub fn bcrypt_hash(&self) -> terrars::PrimExpr<std::string::String> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.bcrypt_hash", self.extract_ref()))
     }
@@ -421,7 +424,7 @@ impl PasswordRef {
     }
 
     #[doc =
-        "Get a reference to the value of field `length` after provisioning.\nThe length of the string desired. The minimum value for length is 1 and, length must also be >= (`min_upper` + `min_lower` + `min_numeric` + `min_special`)."]
+        "Get a reference to the value of field `length` after provisioning.\nThe length of the password desired. The minimum value for length is 1 and, length must also be >= (`min_upper` + `min_lower` + `min_numeric` + `min_special`)."]
     pub fn length(&self) -> terrars::PrimExpr<f64> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.length", self.extract_ref()))
     }
@@ -457,24 +460,24 @@ impl PasswordRef {
     }
 
     #[doc =
-        "Get a reference to the value of field `number` after provisioning.\nInclude numeric characters in the result. Default value is `true`. **NOTE**: This is deprecated, use `numeric` instead."]
+        "Get a reference to the value of field `number` after provisioning.\nInclude numeric characters in the result. Default value is `true`. If `number`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`. **NOTE**: This is deprecated, use `numeric` instead."]
     pub fn number(&self) -> terrars::PrimExpr<bool> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.number", self.extract_ref()))
     }
 
     #[doc =
-        "Get a reference to the value of field `numeric` after provisioning.\nInclude numeric characters in the result. Default value is `true`."]
+        "Get a reference to the value of field `numeric` after provisioning.\nInclude numeric characters in the result. Default value is `true`. If `numeric`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`."]
     pub fn numeric(&self) -> terrars::PrimExpr<bool> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.numeric", self.extract_ref()))
     }
 
     #[doc =
-        "Get a reference to the value of field `override_special` after provisioning.\nSupply your own list of special characters to use for string generation.  This overrides the default character list in the special argument.  The `special` argument must still be set to true for any overwritten characters to be used in generation."]
+        "Get a reference to the value of field `override_special` after provisioning.\nSupply your own list of special characters to use for password generation.  This overrides the default character list in the special argument.  The `special` argument must still be set to true for any overwritten characters to be used in generation."]
     pub fn override_special(&self) -> terrars::PrimExpr<std::string::String> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.override_special", self.extract_ref()))
     }
 
-    #[doc = "Get a reference to the value of field `result` after provisioning.\nThe generated random string."]
+    #[doc = "Get a reference to the value of field `result` after provisioning.\nThe generated random password."]
     pub fn result(&self) -> terrars::PrimExpr<std::string::String> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.result", self.extract_ref()))
     }

@@ -1,3 +1,5 @@
+#![allow(non_camel_case_types)]
+
 use serde::Serialize;
 use terrars::{
     Referable as _,
@@ -7,7 +9,7 @@ use terrars::{
 use super::provider::ProviderRandom;
 
 #[derive(Serialize)]
-struct StringData {
+struct StringData_ {
     #[serde(skip_serializing_if = "std::vec::Vec::is_empty")]
     depends_on: std::vec::Vec<std::string::String>,
     #[serde(skip_serializing_if = "std::option::Option::is_none")]
@@ -46,7 +48,7 @@ struct StringData {
 struct String_ {
     shared: terrars::StackShared,
     tf_id: std::string::String,
-    data: std::cell::RefCell<StringData>,
+    data: std::cell::RefCell<StringData_>,
 }
 
 #[derive(Clone)]
@@ -189,13 +191,14 @@ impl String {
     }
 
     #[doc =
-        "Set the field `number`.\nInclude numeric characters in the result. Default value is `true`. **NOTE**: This is deprecated, use `numeric` instead."]
+        "Set the field `number`.\nInclude numeric characters in the result. Default value is `true`. If `number`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`. **NOTE**: This is deprecated, use `numeric` instead."]
     pub fn set_number(self, v: impl std::convert::Into<terrars::PrimField<bool>>) -> Self {
         self.0.data.borrow_mut().number = std::option::Option::Some(v.into());
         self
     }
 
-    #[doc = "Set the field `numeric`.\nInclude numeric characters in the result. Default value is `true`."]
+    #[doc =
+        "Set the field `numeric`.\nInclude numeric characters in the result. Default value is `true`. If `numeric`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`."]
     pub fn set_numeric(self, v: impl std::convert::Into<terrars::PrimField<bool>>) -> Self {
         self.0.data.borrow_mut().numeric = std::option::Option::Some(v.into());
         self
@@ -269,13 +272,13 @@ impl String {
     }
 
     #[doc =
-        "Get a reference to the value of field `number` after provisioning.\nInclude numeric characters in the result. Default value is `true`. **NOTE**: This is deprecated, use `numeric` instead."]
+        "Get a reference to the value of field `number` after provisioning.\nInclude numeric characters in the result. Default value is `true`. If `number`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`. **NOTE**: This is deprecated, use `numeric` instead."]
     pub fn number(&self) -> terrars::PrimExpr<bool> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.number", self.extract_ref()))
     }
 
     #[doc =
-        "Get a reference to the value of field `numeric` after provisioning.\nInclude numeric characters in the result. Default value is `true`."]
+        "Get a reference to the value of field `numeric` after provisioning.\nInclude numeric characters in the result. Default value is `true`. If `numeric`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`."]
     pub fn numeric(&self) -> terrars::PrimExpr<bool> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.numeric", self.extract_ref()))
     }
@@ -347,7 +350,7 @@ impl BuildString {
         let out = String(std::rc::Rc::new(String_ {
             shared: stack.shared.clone(),
             tf_id: self.tf_id,
-            data: std::cell::RefCell::new(StringData {
+            data: std::cell::RefCell::new(StringData_ {
                 depends_on: core::default::Default::default(),
                 provider: std::option::Option::None,
                 lifecycle: core::default::Default::default(),
@@ -443,13 +446,13 @@ impl StringRef {
     }
 
     #[doc =
-        "Get a reference to the value of field `number` after provisioning.\nInclude numeric characters in the result. Default value is `true`. **NOTE**: This is deprecated, use `numeric` instead."]
+        "Get a reference to the value of field `number` after provisioning.\nInclude numeric characters in the result. Default value is `true`. If `number`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`. **NOTE**: This is deprecated, use `numeric` instead."]
     pub fn number(&self) -> terrars::PrimExpr<bool> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.number", self.extract_ref()))
     }
 
     #[doc =
-        "Get a reference to the value of field `numeric` after provisioning.\nInclude numeric characters in the result. Default value is `true`."]
+        "Get a reference to the value of field `numeric` after provisioning.\nInclude numeric characters in the result. Default value is `true`. If `numeric`, `upper`, `lower`, and `special` are all configured, at least one of them must be set to `true`."]
     pub fn numeric(&self) -> terrars::PrimExpr<bool> {
         terrars::PrimExpr::new(self.shared().clone(), format!("{}.numeric", self.extract_ref()))
     }
